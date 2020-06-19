@@ -14,7 +14,6 @@ class Database:
 
         return cur.fetchall()
 
-
     @staticmethod
     def add_price(title, price, store):
         date = datetime.date.today()
@@ -29,4 +28,3 @@ class Database:
         g.db.commit()
 
         return "Database updated"
-

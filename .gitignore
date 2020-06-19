@@ -1,5 +1,6 @@
 node_modules/
 .idea/
+*/*.db
 
 # Standard Python ignores
 # Byte-compiled / optimized / DLL files
