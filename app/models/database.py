@@ -1,3 +1,5 @@
+import datetime
+
 from flask import g
 
 
@@ -12,4 +14,19 @@ class Database:
 
         return cur.fetchall()
 
+
+    @staticmethod
+    def add_price(title, price, store):
+        date = datetime.date.today()
+
+        cur = g.db.cursor()
+        cur.execute("""
+                        INSERT INTO price
+                            (title, price, store, date)
+                        VALUES
+                            (?,?,?,?)
+                    """, (title, price, store, date))
+        g.db.commit()
+
+        return "Database updated"
 
