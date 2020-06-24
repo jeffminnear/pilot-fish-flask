@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for result in results %}
+        <a href="{{ result.link }}">
+            <img src="{{ result.img_url }}" />
+            <span>{{ result.title }} - {{ result.price }}</span>
+        </a>
+        <hr />
+    {% endfor %}
+{% endblock %}
