@@ -9,9 +9,6 @@ session = HTMLSession()
 def encode(s): return urllib.parse.quote(s)
 
 
-def get_url(url): return urllib.request.urlopen(url)
-
-
 class Scraper:
     @staticmethod
     def steam(query):
@@ -36,6 +33,3 @@ class Scraper:
             results.append(result)
 
         return results
-
-        # div = soup.find(query={'id': 'search_resultsRows'})
-        # print(div.get_attribute('innerHTML'))
