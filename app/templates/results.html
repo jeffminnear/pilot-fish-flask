@@ -2,7 +2,7 @@
 
 {% block content %}
     {% for result in results %}
-        <a href="{{ result.link }}">
+        <a href="{{ result.link }}" target="_blank">
             <img src="{{ result.img_url }}" />
             <span>{{ result.title }} - {{ result.price }}</span>
         </a>
