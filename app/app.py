@@ -69,6 +69,17 @@ def create_tables():
                         title TEXT NOT NULL,
                         price FLOAT NOT NULL,
                         store TEXT NOT NULL,
+                        date TEXT NOT NULL,
+                        search INTEGER NOT NULL,
+                        FOREIGN KEY(search) references search(id)
+                    );
+                """)
+
+    cur.execute("""
+                    CREATE TABLE IF NOT EXISTS search
+                    (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        term TEXT NOT NULL,
                         date TEXT NOT NULL
                     );
                 """)
