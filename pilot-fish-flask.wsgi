@@ -1,5 +1,5 @@
 #flaskapp.wsgi
 import sys
-sys.path.insert(0, '/var/www/html/pilot-fish-flask')
+sys.path.insert(0, '/var/www/html/pilotfishflask')
 
-from pilot-fish-flask import app as application
+from pilotfishflask import app as application
