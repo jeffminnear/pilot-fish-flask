@@ -1,6 +1,7 @@
 from flask import Flask, render_template, g, request
-import sqlite3 as sql
+import psycopg2.extras
 
+from local import DB_PASSWORD
 from models.database import Database as db
 from scraper import Scraper as scrape
 
@@ -9,15 +10,14 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
-    g.db = sql.connect('pilot_fish.db')
-    g.db.row_factory = sql.Row
+    g.con = psycopg2.connect(dbname='pilot_fish', user='postgres', host='localhost', password=DB_PASSWORD)
     create_tables()
 
 
 @app.teardown_request
 def teardown_request(exception):
     if hasattr(g, 'db'):
-        g.db.close()
+        g.con.close()
 
 
 @app.route('/')
@@ -31,9 +31,22 @@ def get_stores():
     return render_template('store.html', stores=stores)
 
 
-@app.route('/search/<string:query>', methods=['GET'])
-def search(query):
-    results = scrape.steam(query)
+@app.route('/search/<string:term>', methods=['GET'])
+def search_stores(term):
+    search = db.get_search(term)
+    if search is None or search == "" or search == []:
+        search = db.new_search(term)
+        results = scrape.steam(term)
+        for result in results:
+            db.add_price(title=result['title'],
+                         price=result['price'],
+                         link=result['link'],
+                         img_url=result['img_url'],
+                         store=1,
+                         search=search['id'])
+    else:
+        results = db.get_prices_by_search_id(search['id'])
+
     return render_template('results.html', results=results)
 
 
@@ -53,36 +66,40 @@ def add_price():
 
 
 def create_tables():
-    cur = g.db.cursor()
+    cur = g.con.cursor()
     cur.execute("""
                     CREATE TABLE IF NOT EXISTS store
                     (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT NOT NULL
-                    );
-                """)
-
-    cur.execute("""
-                    CREATE TABLE IF NOT EXISTS price
-                    (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        title TEXT NOT NULL,
-                        price FLOAT NOT NULL,
-                        store TEXT NOT NULL,
-                        date TEXT NOT NULL,
-                        search INTEGER NOT NULL,
-                        FOREIGN KEY(search) references search(id)
+                        id SERIAL PRIMARY KEY,
+                        name VARCHAR NOT NULL
                     );
                 """)
 
     cur.execute("""
                     CREATE TABLE IF NOT EXISTS search
                     (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        term TEXT NOT NULL,
-                        date TEXT NOT NULL
+                        id SERIAL PRIMARY KEY,
+                        term VARCHAR NOT NULL,
+                        date DATE NOT NULL
                     );
                 """)
+
+    cur.execute("""
+                    CREATE TABLE IF NOT EXISTS price
+                    (
+                        id SERIAL PRIMARY KEY,
+                        title VARCHAR NOT NULL,
+                        price VARCHAR NOT NULL,
+                        link VARCHAR NOT NULL,
+                        img_url VARCHAR NOT NULL,
+                        store VARCHAR NOT NULL,
+                        date DATE NOT NULL,
+                        search INTEGER NOT NULL,
+                        FOREIGN KEY(search) references search(id)
+                    );
+                """)
+
+    g.con.commit()
 
 
 if __name__ == '__main__':

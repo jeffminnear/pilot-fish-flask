@@ -11,8 +11,8 @@ def encode(s): return urllib.parse.quote(s)
 
 class Scraper:
     @staticmethod
-    def steam(query):
-        url = 'https://store.steampowered.com/search/?term=' + encode(query)
+    def steam(term):
+        url = 'https://store.steampowered.com/search/?term=' + encode(term)
 
         r = session.get(url)
         soup = BeautifulSoup(r.html.html, 'html.parser')
