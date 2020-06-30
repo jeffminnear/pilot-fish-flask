@@ -10,7 +10,11 @@ app = Flask(__name__)
 
 @app.before_request
 def before_request():
-    g.con = psycopg2.connect(dbname='pilot_fish', user='postgres', host='localhost', password=DB_PASSWORD)
+    g.con = psycopg2.connect(dbname='pilot_fish',
+                             user='postgres',
+                             host='localhost',
+                             password=DB_PASSWORD,
+                             cursor_factory=psycopg2.extras.DictCursor)
     create_tables()
 
 
@@ -42,7 +46,7 @@ def search_stores(term):
                          price=result['price'],
                          link=result['link'],
                          img_url=result['img_url'],
-                         store=1,
+                         store=result['store'],
                          search=search['id'])
     else:
         results = db.get_prices_by_search_id(search['id'])
@@ -67,12 +71,23 @@ def add_price():
 
 def create_tables():
     cur = g.con.cursor()
+    cur.execute("""DROP TABLE IF EXISTS store""")
+
     cur.execute("""
                     CREATE TABLE IF NOT EXISTS store
                     (
                         id SERIAL PRIMARY KEY,
                         name VARCHAR NOT NULL
                     );
+                """)
+
+    cur.execute("""
+                    INSERT INTO store
+                        (name)
+                    VALUES
+                        ('Steam'),
+                        ('GreenManGaming'),
+                        ('GOG')
                 """)
 
     cur.execute("""

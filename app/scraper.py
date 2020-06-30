@@ -29,7 +29,8 @@ class Scraper:
             result = {'link': link,
                       'img_url': img_url,
                       'title': title,
-                      'price': '$' + str(float(price) / 100)}
+                      'price': '$' + str(float(price) / 100),
+                      'store': 1}
             results.append(result)
 
         return results

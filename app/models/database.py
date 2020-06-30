@@ -7,7 +7,7 @@ from flask import g
 class Database:
     @staticmethod
     def get_all_stores():
-        cur = g.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur = g.con.cursor()
         cur.execute("""
                         SELECT *
                         FROM store;
@@ -34,7 +34,7 @@ class Database:
     @staticmethod
     def get_search(term):
         term = term.replace("'", "\'")
-        cur = g.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur = g.con.cursor()
         cur.execute(f"""
                         SELECT *
                         FROM search
@@ -62,7 +62,7 @@ class Database:
 
     @staticmethod
     def get_prices_by_search_id(id):
-        cur = g.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur = g.con.cursor()
         cur.execute(f"""
                         SELECT *
                         FROM price
