@@ -36,9 +36,15 @@ def get_stores():
     return render_template('store.html', stores=stores)
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET', 'POST'])
 def searchbar():
+    if request.method == 'GET':
+        return redirect('/')
+
     term = request.form['term']
+    if term is None or term == '':
+        return redirect('/')
+
     return redirect(f'/search/{term}')
 
 
