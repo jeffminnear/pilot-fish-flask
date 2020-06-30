@@ -3,11 +3,15 @@
 {% block title %}Results{% endblock %}
 
 {% block content %}
+    <ul class="my-4">
     {% for result in results %}
-        <a href="{{ result.link }}" target="_blank">
-            <img src="{{ result.img_url }}" />
-            <span>{{ result.title }} - {{ result.price }}</span>
-        </a>
-        <hr />
+        <li style="list-style: none;">
+            <a href="{{ result.link }}" target="_blank">
+                <img src="{{ result.img_url }}" />
+                <span>{{ result.title }} - {{ result.price }}</span>
+            </a>
+            <hr />
+        </li>
     {% endfor %}
+    </ul>
 {% endblock %}
