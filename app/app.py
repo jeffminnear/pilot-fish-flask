@@ -1,11 +1,12 @@
-from flask import Flask, render_template, g, request
+from flask import Flask, render_template, g, request, redirect
 import psycopg2.extras
 
-from local import DB_PASSWORD
+from local import DB_PASSWORD, SECRET_KEY
 from models.database import Database as db
 from scraper import Scraper as scrape
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
 
 
 @app.before_request
@@ -33,6 +34,18 @@ def hello():
 def get_stores():
     stores = db.get_all_stores()
     return render_template('store.html', stores=stores)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def searchbar():
+    if request.method == 'GET':
+        return redirect('/')
+
+    term = request.form['term']
+    if term is None or term == '':
+        return redirect('/')
+
+    return redirect(f'/search/{term}')
 
 
 @app.route('/search/<string:term>', methods=['GET'])

@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}Stores{% endblock %}
+
 {% block content %}
     <h1>Stores</h1>
 
     {% for store in stores %}
-    <h3>{{ store.name }}</h3>
+        <h3>{{ store.name }}</h3>
     {% endfor %}
 {% endblock %}
