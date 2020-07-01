@@ -82,3 +82,15 @@ class Database:
                     """)
 
         return cur.fetchall()
+
+    @staticmethod
+    def get_lowest_price_by_title(title):
+        cur = g.con.cursor()
+        cur.execute(f"""
+                        SELECT price, date
+                        FROM price
+                        WHERE title = '{title}'
+                        ORDER BY price ASC;
+                    """)
+
+        return cur.fetchone()
