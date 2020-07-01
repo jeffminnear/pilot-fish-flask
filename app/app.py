@@ -25,6 +25,13 @@ def teardown_request(exception):
         g.con.close()
 
 
+@app.template_filter('date')
+def format_date(val, format='%B %d, %Y'):
+    if val is None:
+        return ''
+    return val.strftime(format)
+
+
 @app.route('/')
 def hello():
     return render_template('home.html')
@@ -63,6 +70,12 @@ def search_stores(term):
                          search=search['id'])
     else:
         results = db.get_prices_by_search_id(search['id'])
+
+    for i in range(len(results)):
+        results[i] = dict(results[i])
+        results[i]['store_name'] = db.get_store_by_id(results[i]['store'])['name']
+        results[i]['lowest'] = db.get_lowest_price_by_title(results[i]['title'])
+        print(results[i]['lowest'])
 
     return render_template('results.html', results=results)
 
@@ -117,7 +130,7 @@ def create_tables():
                     (
                         id SERIAL PRIMARY KEY,
                         title VARCHAR NOT NULL,
-                        price VARCHAR NOT NULL,
+                        price DECIMAL NOT NULL,
                         link VARCHAR NOT NULL,
                         img_url VARCHAR NOT NULL,
                         store VARCHAR NOT NULL,

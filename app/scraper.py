@@ -24,12 +24,13 @@ class Scraper:
             link = entry['href']
             img_url = entry.select('.search_capsule img')[0]['src']
             title = entry.select('.responsive_search_name_combined .search_name')[0].text.strip()
+
             price = entry.select('.responsive_search_name_combined .search_price_discount_combined')[0]['data-price-final']
 
             result = {'link': link,
                       'img_url': img_url,
                       'title': title,
-                      'price': '$' + str(float(price) / 100),
+                      'price': (float(price) / 100),
                       'store': 1}
             results.append(result)
 

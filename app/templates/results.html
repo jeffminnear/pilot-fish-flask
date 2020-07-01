@@ -8,8 +8,11 @@
         <li style="list-style: none;">
             <a href="{{ result.link }}" target="_blank">
                 <img src="{{ result.img_url }}" />
-                <span>{{ result.title }} - {{ result.price }}</span>
+                <span>{{ result.title }} - ${{ result.price }}</span>
+                <span>on {{ result.store_name }}</span>
             </a>
+            <br />
+            <small>lowest recorded price was ${{ result.lowest.price }} on {{ result.lowest.date | date }}</small>
             <hr />
         </li>
     {% endfor %}

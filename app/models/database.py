@@ -16,6 +16,17 @@ class Database:
         return cur.fetchall()
 
     @staticmethod
+    def get_store_by_id(id):
+        cur = g.con.cursor()
+        cur.execute(f"""
+                        SELECT *
+                        FROM store
+                        WHERE id = {id};
+                    """)
+
+        return cur.fetchone()
+
+    @staticmethod
     def add_price(title, price, link, img_url, store, search):
         date = datetime.date.today()
         title = title.replace("'", "\'")
@@ -71,3 +82,15 @@ class Database:
                     """)
 
         return cur.fetchall()
+
+    @staticmethod
+    def get_lowest_price_by_title(title):
+        cur = g.con.cursor()
+        cur.execute(f"""
+                        SELECT price, date
+                        FROM price
+                        WHERE title = '{title}'
+                        ORDER BY price ASC;
+                    """)
+
+        return cur.fetchone()
