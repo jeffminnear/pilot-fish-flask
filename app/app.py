@@ -64,6 +64,13 @@ def search_stores(term):
     else:
         results = db.get_prices_by_search_id(search['id'])
 
+    for i in range(len(results)):
+        store_name = db.get_store_by_id(results[i]['store'])['name']
+        results[i] = dict(results[i])
+        results[i]['store_name'] = store_name
+
+    print(results)
+
     return render_template('results.html', results=results)
 
 
@@ -117,7 +124,7 @@ def create_tables():
                     (
                         id SERIAL PRIMARY KEY,
                         title VARCHAR NOT NULL,
-                        price VARCHAR NOT NULL,
+                        price DECIMAL NOT NULL,
                         link VARCHAR NOT NULL,
                         img_url VARCHAR NOT NULL,
                         store VARCHAR NOT NULL,
