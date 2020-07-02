@@ -12,6 +12,7 @@ def encode(s): return urllib.parse.quote(s)
 
 def get_soup(url):
     r = session.get(url)
+    r.html.render()
     return BeautifulSoup(r.html.html, 'html.parser')
 
 
@@ -46,9 +47,7 @@ class Scraper:
         base_url = 'https://www.greenmangaming.com'
         search_url = base_url + '/search/' + encode(term)
 
-        r = session.get(search_url)
-        r.html.render()
-        soup = BeautifulSoup(r.html.html, 'html.parser')
+        soup = get_soup(search_url)
 
         results = []
 
