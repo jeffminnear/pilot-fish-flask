@@ -47,7 +47,7 @@ class Scraper:
     @staticmethod
     def gog(term):
         base_url = 'https://www.gog.com'
-        search_url = base_url + '/games/ajax/filtered?limit=20&search=' + term
+        search_url = base_url + '/games/ajax/filtered?limit=20&search=' + encode(term)
 
         response = json.loads(requests.get(search_url).text)
         entries = response['products']
@@ -60,6 +60,35 @@ class Scraper:
                       'title': entry['title'],
                       'price': float(entry['price']['amount']),
                       'store': 3}
+
+            results.append(result)
+
+        return results
+
+    @staticmethod
+    def fanatical(term):
+        base_url = 'https://www.fanatical.com'
+        search_url = base_url + '/en/search?search=' + encode(term)
+
+        soup = get_soup(search_url)
+        print(soup.prettify())
+        results = []
+
+        entries = soup.select('.ais-Hits__root > .card-container')[:10]
+        for entry in entries:
+            link = entry.select('a.faux-block-link__overlay-link')[0]['href']
+
+            image_object = entry.select('.responsive-image img.img-fluid')[0]
+            img_url = image_object['src']
+            title = image_object['alt']
+
+            price = entry.select('span.card-price')[0].text.replace('$', '')
+
+            result = {'link': base_url + link,
+                      'img_url': img_url,
+                      'title': title,
+                      'price': float(price),
+                      'store': 4}
 
             results.append(result)
 

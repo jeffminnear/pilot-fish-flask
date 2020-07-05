@@ -116,7 +116,8 @@ def create_tables():
                     VALUES
                         ('Steam'),
                         ('GreenManGaming'),
-                        ('GOG')
+                        ('GOG'),
+                        ('Fanatical')
                 """)
 
     cur.execute("""
