@@ -27,7 +27,7 @@ def teardown_request(exception):
 
 @app.template_filter('date')
 def format_date(val, format='%B %d, %Y'):
-    if val is None:
+    if val is None or val == 'unknown':
         return ''
     return val.strftime(format)
 
@@ -57,10 +57,13 @@ def searchbar():
 
 @app.route('/search/<string:term>', methods=['GET'])
 def search_stores(term):
+    term = term.replace("'", "")
+
     search = db.get_search(term)
     if search is None or search == "" or search == []:
         search = db.new_search(term)
-        results = scrape.steam(term)
+        scrape.greenmangaming(term)
+        results = scrape.steam(term) + scrape.greenmangaming(term)
         for result in results:
             db.add_price(title=result['title'],
                          price=result['price'],
@@ -75,7 +78,8 @@ def search_stores(term):
         results[i] = dict(results[i])
         results[i]['store_name'] = db.get_store_by_id(results[i]['store'])['name']
         results[i]['lowest'] = db.get_lowest_price_by_title(results[i]['title'])
-        print(results[i]['lowest'])
+        if results[i]['lowest'] is None:
+            results[i]['lowest'] = { 'price': 'unknown', 'date': 'unknown' }
 
     return render_template('results.html', results=results)
 

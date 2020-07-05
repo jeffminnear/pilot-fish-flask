@@ -29,7 +29,7 @@ class Database:
     @staticmethod
     def add_price(title, price, link, img_url, store, search):
         date = datetime.date.today()
-        title = title.replace("'", "\'")
+        title = title.replace("'", "''")
 
         cur = g.con.cursor()
         cur.execute("""
@@ -44,7 +44,7 @@ class Database:
 
     @staticmethod
     def get_search(term):
-        term = term.replace("'", "\'")
+        term = term.replace("'", "''")
         cur = g.con.cursor()
         cur.execute(f"""
                         SELECT *
@@ -58,7 +58,7 @@ class Database:
     @staticmethod
     def new_search(term):
         date = datetime.date.today()
-        term = term.replace("'", "\'")
+        term = term.replace("'", "''")
 
         cur = g.con.cursor()
         cur.execute("""
@@ -85,6 +85,7 @@ class Database:
 
     @staticmethod
     def get_lowest_price_by_title(title):
+        title = title.replace("'", "''")
         cur = g.con.cursor()
         cur.execute(f"""
                         SELECT price, date
