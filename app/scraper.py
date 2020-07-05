@@ -1,4 +1,6 @@
 import urllib
+import requests
+import json
 
 from requests_html import HTMLSession
 from bs4 import BeautifulSoup
@@ -38,6 +40,27 @@ class Scraper:
                       'title': title,
                       'price': (float(price) / 100),
                       'store': 1}
+            results.append(result)
+
+        return results
+
+    @staticmethod
+    def gog(term):
+        base_url = 'https://www.gog.com'
+        search_url = base_url + '/games/ajax/filtered?limit=20&search=' + term
+
+        response = json.loads(requests.get(search_url).text)
+        entries = response['products']
+
+        results = []
+
+        for entry in entries:
+            result = {'link': base_url + entry['url'],
+                      'img_url': 'http:' + entry['image'] + '.jpg',
+                      'title': entry['title'],
+                      'price': float(entry['price']['amount']),
+                      'store': 3}
+
             results.append(result)
 
         return results
