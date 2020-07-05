@@ -69,7 +69,8 @@ def search_stores(term):
                          link=result['link'],
                          img_url=result['img_url'],
                          store=result['store'],
-                         search=search['id'])
+                         search=search['id'],
+                         sort_order=result['sort_order'])
     else:
         results = db.get_prices_by_search_id(search['id'])
 
@@ -79,6 +80,8 @@ def search_stores(term):
         results[i]['lowest'] = db.get_lowest_price_by_title(results[i]['title'])
         if results[i]['lowest'] is None:
             results[i]['lowest'] = { 'price': 'unknown', 'date': 'unknown' }
+
+    results = sorted(results, key=lambda i: i['sort_order'])
 
     return render_template('results.html', results=results)
 
@@ -125,7 +128,8 @@ def create_tables():
                         store VARCHAR NOT NULL,
                         date DATE NOT NULL,
                         search INTEGER NOT NULL,
-                        FOREIGN KEY(search) references search(id)
+                        FOREIGN KEY(search) references search(id),
+                        sort_order INTEGER NOT NULL
                     );
                 """)
 

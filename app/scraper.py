@@ -27,6 +27,7 @@ class Scraper:
 
         results = []
 
+        i = 1
         entries = soup.select('#search_resultsRows a')[:10]
         for entry in entries:
             link = entry['href']
@@ -39,8 +40,10 @@ class Scraper:
                       'img_url': img_url,
                       'title': title,
                       'price': (float(price) / 100),
-                      'store': 1}
+                      'store': 1,
+                      'sort_order': i}
             results.append(result)
+            i += 1
 
         return results
 
@@ -54,14 +57,17 @@ class Scraper:
 
         results = []
 
+        i = 1
         for entry in entries:
             result = {'link': base_url + entry['url'],
                       'img_url': 'http:' + entry['image'] + '.jpg',
                       'title': entry['title'],
                       'price': float(entry['price']['amount']),
-                      'store': 3}
+                      'store': 3,
+                      'sort_order': i}
 
             results.append(result)
+            i += 1
 
         return results
 
@@ -74,6 +80,7 @@ class Scraper:
 
         results = []
 
+        i = 1
         entries = soup.select('.ais-Hits__root > .card-container')[:10]
         for entry in entries:
             link = entry.select('a.faux-block-link__overlay-link')[0]['href']
@@ -88,9 +95,11 @@ class Scraper:
                       'img_url': img_url,
                       'title': title,
                       'price': float(price),
-                      'store': 4}
+                      'store': 4,
+                      'sort_order': i}
 
             results.append(result)
+            i += 1
 
         return results
 
@@ -103,6 +112,7 @@ class Scraper:
 
         results = []
 
+        i = 1
         entries = soup.select('ul.table-search-listings > li')[:10]
         for entry in entries:
             media_object = entry.select('.media-object')[0]
@@ -117,8 +127,10 @@ class Scraper:
                       'img_url': img_url,
                       'title': title,
                       'price': float(price),
-                      'store': 2}
+                      'store': 2,
+                      'sort_order': i}
 
             results.append(result)
+            i += 1
 
         return results

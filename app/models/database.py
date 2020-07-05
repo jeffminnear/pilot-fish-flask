@@ -27,17 +27,17 @@ class Database:
         return cur.fetchone()
 
     @staticmethod
-    def add_price(title, price, link, img_url, store, search):
+    def add_price(title, price, link, img_url, store, search, sort_order):
         date = datetime.date.today()
         title = title.replace("'", "''")
 
         cur = g.con.cursor()
         cur.execute("""
                         INSERT INTO price
-                            (title, price, link, img_url, store, date, search)
+                            (title, price, link, img_url, store, date, search, sort_order)
                         VALUES
-                            (%s,%s,%s,%s,%s,%s,%s)
-                    """, (title, price, link, img_url, store, date, search))
+                            (%s,%s,%s,%s,%s,%s,%s,%s)
+                    """, (title, price, link, img_url, store, date, search, sort_order))
         g.con.commit()
 
         return "Database updated"
