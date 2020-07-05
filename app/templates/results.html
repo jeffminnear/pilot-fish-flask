@@ -7,7 +7,7 @@
     {% for result in results %}
         <li style="list-style: none;">
             <a href="{{ result.link }}" target="_blank">
-                <img src="{{ result.img_url }}" />
+                <img class="img img-responsive" style="width: 120px;" src="{{ result.img_url }}" />
                 <span>{{ result.title }} - ${{ result.price }}</span>
                 <span>on {{ result.store_name }}</span>
             </a>
