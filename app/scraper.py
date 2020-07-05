@@ -71,7 +71,7 @@ class Scraper:
         search_url = base_url + '/en/search?search=' + encode(term)
 
         soup = get_soup(search_url)
-        print(soup.prettify())
+
         results = []
 
         entries = soup.select('.ais-Hits__root > .card-container')[:10]

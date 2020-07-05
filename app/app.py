@@ -83,21 +83,6 @@ def search_stores(term):
     return render_template('results.html', results=results)
 
 
-@app.route('/newprice')
-def new_price():
-    return render_template('newprice.html')
-
-
-@app.route('/add_price', methods=['POST'])
-def add_price():
-    title = request.form['title']
-    price = request.form['price']
-    store = request.form['store']
-
-    db.add_price(title=title, price=float(price), store=store)
-    return render_template('newprice.html')
-
-
 def create_tables():
     cur = g.con.cursor()
     cur.execute("""DROP TABLE IF EXISTS store""")
