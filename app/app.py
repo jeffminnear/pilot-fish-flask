@@ -62,8 +62,7 @@ def search_stores(term):
     search = db.get_search(term)
     if search is None or search == "" or search == []:
         search = db.new_search(term)
-        scrape.greenmangaming(term)
-        results = scrape.steam(term) + scrape.greenmangaming(term)
+        results = scrape.steam(term) + scrape.gog(term)
         for result in results:
             db.add_price(title=result['title'],
                          price=result['price'],
