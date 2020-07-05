@@ -7,7 +7,7 @@
     {% for result in results %}
         <a class="list-group-item list-group-item-action" href="{{ result.link }}" target="_blank">
             <img class="img img-responsive" style="width: 120px;" src="{{ result.img_url }}" />
-            <span>{{ result.title }} - </span><span class="badge badge-success">${{ result.price }}</span>
+            <span class="badge badge-dark">{{ result.title }}</span> - <span class="badge badge-success">${{ result.price }}</span>
             <span>on {{ result.store_name }}</span>
             <br />
             <small>lowest recorded price was ${{ result.lowest.price }} on {{ result.lowest.date | date }}</small>
