@@ -2,6 +2,7 @@ node_modules/
 .idea/
 */*.db
 local.py
+app/static/bundle.js
 
 # Standard Python ignores
 # Byte-compiled / optimized / DLL files
